@@ -17,15 +17,16 @@ const NavigationBar = () => {
     navbarOptions = (
         <>
             <li>
+                <Link to={"/"} className="hover:text-info">
+                    Home
+                </Link>
+            </li>
+            <li>
                 <Link to={"/create-task"} className="hover:text-info">
                     Create Task
                 </Link>
             </li>
-            <li>
-                <Link to={"/tasks"} className="hover:text-info">
-                    Tasks
-                </Link>
-            </li>
+
             <li>
                 <a>Item 3</a>
             </li>

@@ -54,6 +54,7 @@ const CreateTask = () => {
             showConfirmButton: false,
             timer: 2000,
         });
+        navigate("/");
     };
 
     return (

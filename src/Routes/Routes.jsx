@@ -29,7 +29,7 @@ const router = createBrowserRouter([
                 element: <CreateTask></CreateTask>,
             },
             {
-                path: "/tasks",
+                path: "/",
                 element: <Tasks></Tasks>,
             },
             {

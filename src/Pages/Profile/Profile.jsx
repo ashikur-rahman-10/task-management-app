@@ -30,7 +30,6 @@ const Profile = ({ userEmail }) => {
     return (
         <div className="w-full min-h-[90vh] flex items-center justify-center px-4">
             <div className="flex flex-col items-center justify-center">
-                <h1 className="text-3xl">User Profile</h1>
                 <img
                     className="w-48 h-48 rounded-full mt-10 outline outline-success hover:scale-150 hover:rounded-sm duration-1000"
                     src={loggedUser?.photoURL}
