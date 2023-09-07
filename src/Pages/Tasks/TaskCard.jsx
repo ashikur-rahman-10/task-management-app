@@ -25,13 +25,13 @@ const TaskCard = ({ task }) => {
     let shadowColor = "";
     switch (status) {
         case "Pending":
-            shadowColor = "bg-red-200";
+            shadowColor = "shadow-red-400";
             break;
         case "In Progress":
-            shadowColor = "bg-sky-200";
+            shadowColor = "shadow-sky-400";
             break;
         case "Completed":
-            shadowColor = "bg-green-200";
+            shadowColor = "shadow-green-400";
             break;
         default:
             break;
