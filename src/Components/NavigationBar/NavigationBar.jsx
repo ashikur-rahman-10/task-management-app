@@ -92,15 +92,19 @@ const NavigationBar = () => {
                                 tabIndex={0}
                                 className="btn btn-ghost btn-circle avatar"
                             >
-                                <div className="w-10 outline outline-success rounded-full">
+                                <Link
+                                    to={"/profile"}
+                                    className="w-10 outline outline-success rounded-full"
+                                >
                                     {user.photoURL ? (
-                                        <Link to={"/profile"}>
-                                            <img src={user.photoURL} />
-                                        </Link>
+                                        <img
+                                            className="rounded-full"
+                                            src={user.photoURL}
+                                        />
                                     ) : (
                                         <img src="" />
                                     )}
-                                </div>
+                                </Link>
                             </label>
                         </div>
                     ) : (
