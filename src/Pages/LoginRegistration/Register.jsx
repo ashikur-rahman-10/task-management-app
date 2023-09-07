@@ -108,7 +108,7 @@ const Register = () => {
                 <div className=" p-4 w-full max-w-4xl md:ml-20">
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="shadow-md shadow-purple-500 rounded-xl  md:p-10 p-6 "
+                        className="shadow-md shadow-[#9BC1DE] rounded-xl  md:p-10 p-6 "
                     >
                         <h1 className="text-center  md:text-4xl text-2xl my-10 md:my-5">
                             Sign Up

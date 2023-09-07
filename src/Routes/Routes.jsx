@@ -3,6 +3,9 @@ import Main from "../Layouts/Main";
 import Login from "../Pages/LoginRegistration/Login";
 import Register from "../Pages/LoginRegistration/Register";
 import Profile from "../Pages/Profile/Profile";
+import CreateTask from "../Pages/CreateTask/CreateTask";
+import Tasks from "../Pages/Tasks/Tasks";
+import TaskDetails from "../Pages/TaskDetails/TaskDetails";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +23,18 @@ const router = createBrowserRouter([
             {
                 path: "/profile",
                 element: <Profile></Profile>,
+            },
+            {
+                path: "/create-task",
+                element: <CreateTask></CreateTask>,
+            },
+            {
+                path: "/tasks",
+                element: <Tasks></Tasks>,
+            },
+            {
+                path: "/task-details/:id",
+                element: <TaskDetails></TaskDetails>,
             },
         ],
     },

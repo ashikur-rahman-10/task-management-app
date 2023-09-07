@@ -13,8 +13,37 @@ const NavigationBar = () => {
             .catch((error) => {});
     };
 
+    let navbarOptions;
+    navbarOptions = (
+        <>
+            <li>
+                <Link to={"/create-task"} className="hover:text-info">
+                    Create Task
+                </Link>
+            </li>
+            <li>
+                <Link to={"/tasks"} className="hover:text-info">
+                    Tasks
+                </Link>
+            </li>
+            <li>
+                <a>Item 3</a>
+            </li>
+            <li>
+                {user && (
+                    <button
+                        onClick={handleLogout}
+                        className="text-red-400 font-medium "
+                    >
+                        Logout
+                    </button>
+                )}
+            </li>
+        </>
+    );
+
     return (
-        <div className=" bg-gradient-to-r from-black via-[#180223] text-white to-[#0F0212] border-b border-purple-600 w-full bg-opacity-25">
+        <div className=" bg-gradient-to-r from-black via-[#d4a8e9] text-white to-[#0F0212] border-b border-purple-600 w-full bg-opacity-25">
             <div className="navbar w-full max-w-6xl mx-auto ">
                 <div className="navbar-start">
                     <div className="dropdown">
@@ -36,76 +65,23 @@ const NavigationBar = () => {
                         </label>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow  bg-gradient-to-r from-black via-[#180223] text-white to-[#0F0212] rounded-box w-52"
+                            className="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow space-y-2   bg-gradient-to-r from-black via-[#d4a8e9] text-white to-[#0F0212] rounded-box w-52"
                         >
-                            <li>
-                                <a>Item 1</a>
-                            </li>
-                            <li>
-                                <a>Parent</a>
-                                <ul className="p-2">
-                                    <li>
-                                        <a>Submenu 1</a>
-                                    </li>
-                                    <li>
-                                        <a>Submenu 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a>Item 3</a>
-                            </li>
-
-                            <li>
-                                {user && (
-                                    <button
-                                        onClick={handleLogout}
-                                        className="text-red-400 font-medium pr-10"
-                                    >
-                                        Logout
-                                    </button>
-                                )}
-                            </li>
+                            {navbarOptions}
                         </ul>
                     </div>
-                    <Link
-                        to={"/"}
-                        className=" hover:scale-105 duration-500 rounded-xl px-4 py-2 normal-case text-xl"
-                    >
-                        Task Management
-                    </Link>
+                    <div className="">
+                        <Link
+                            to={"/"}
+                            className=" hover:scale-105 duration-500 rounded-xl px-4 py-2 normal-case text-xs font-medium  md:text-xl"
+                        >
+                            Task Management
+                        </Link>
+                    </div>
                 </div>
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
-                        <li>
-                            <a>Item 1</a>
-                        </li>
-                        <li tabIndex={0}>
-                            <details>
-                                <summary>Parent</summary>
-                                <ul className="p-2  bg-gradient-to-r from-black via-[#180223] text-white to-[#0F0212] w-40">
-                                    <li>
-                                        <a>Submenu 1</a>
-                                    </li>
-                                    <li>
-                                        <a>Submenu 2</a>
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-                        <li>
-                            <a>Item 3</a>
-                        </li>
-                        <li>
-                            {user && (
-                                <button
-                                    onClick={handleLogout}
-                                    className="text-red-400 font-medium pr-10"
-                                >
-                                    Logout
-                                </button>
-                            )}
-                        </li>
+                    <ul className="menu menu-horizontal px-1 gap-4">
+                        {navbarOptions}
                     </ul>
                 </div>
                 <div className="navbar-end pr-4">

@@ -8,7 +8,7 @@ const Profile = ({ userEmail }) => {
     useEffect(() => {
         // Retrieve the list of users from local storage or your data source
         const users = JSON.parse(localStorage.getItem("users")) || [];
-        console.log(users);
+
         // Find the user with the matching email
         const matchedUser = users.find((u) => u.email == user.email);
         // console.log(matchedUser);
