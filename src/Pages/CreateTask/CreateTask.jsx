@@ -63,7 +63,6 @@ const CreateTask = () => {
 
     return (
         <div className="w-full min-h-[90vh] pt-8 flex items-center justify-center">
-            4
             <Helmet>
                 <title>Create Task</title>
             </Helmet>
@@ -83,7 +82,7 @@ const CreateTask = () => {
                             type="text"
                             name="title"
                             required
-                            className="input input-info w-full"
+                            className="input input-info bg-transparent w-full"
                         />
                     </div>
                     <div className="md:w-[450px] w-full px-4">
@@ -93,7 +92,7 @@ const CreateTask = () => {
                         <textarea
                             name="description"
                             required
-                            className="textarea textarea-info w-full h-40"
+                            className="textarea textarea-info w-full bg-transparent h-40"
                         ></textarea>
                     </div>
                     <div className="md:w-[450px] w-full px-4">
@@ -104,7 +103,7 @@ const CreateTask = () => {
                             type="date"
                             name="dueDate"
                             required
-                            className="input input-info w-full"
+                            className="input input-info bg-transparent w-full"
                         />
                     </div>
                     <div className="md:w-[450px] w-full px-4">
@@ -117,7 +116,7 @@ const CreateTask = () => {
                                 name="priority"
                                 value="Low"
                                 required
-                                className="mr-2"
+                                className="mr-2 bg-transparent"
                             />{" "}
                             Low
                             <input
@@ -125,7 +124,7 @@ const CreateTask = () => {
                                 name="priority"
                                 value="Medium"
                                 required
-                                className="mr-2 ml-4"
+                                className="mr-2 bg-transparent ml-4"
                             />{" "}
                             Medium
                             <input
@@ -133,7 +132,7 @@ const CreateTask = () => {
                                 name="priority"
                                 value="High"
                                 required
-                                className="mr-2 ml-4"
+                                className="mr-2 bg-transparent ml-4"
                             />{" "}
                             High
                         </div>
@@ -146,7 +145,7 @@ const CreateTask = () => {
                             type="text"
                             name="assignedTo"
                             required
-                            className="input input-info w-full"
+                            className="input input-info bg-transparent w-full"
                         />
                     </div> */}
                     <div className="md:w-[450px] w-full px-4">
@@ -157,7 +156,7 @@ const CreateTask = () => {
                             name="assignedTeam"
                             value={selectedTeam}
                             onChange={(e) => setSelectedTeam(e.target.value)}
-                            className="input input-info w-full"
+                            className="input input-info bg-transparent w-full"
                         >
                             <option value="" disabled>
                                 Select a Team

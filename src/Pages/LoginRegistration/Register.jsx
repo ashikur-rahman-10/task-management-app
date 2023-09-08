@@ -136,7 +136,7 @@ const Register = () => {
                                     type="text"
                                     placeholder="name"
                                     {...register("name", { required: true })}
-                                    className="input input-bordered input-info text-black"
+                                    className="input input-bordered input-info bg-transparent "
                                 />
                             </div>
                             <div className="form-control w-full">
@@ -147,7 +147,7 @@ const Register = () => {
                                     type="email"
                                     placeholder="email"
                                     {...register("email", { required: true })}
-                                    className="input input-bordered input-info text-black"
+                                    className="input input-bordered input-info bg-transparent "
                                 />
                             </div>
                         </div>
@@ -167,7 +167,7 @@ const Register = () => {
                                         minLength: 6,
                                         required: true,
                                     })}
-                                    className="input input-bordered input-info text-black"
+                                    className="input input-bordered input-info bg-transparent "
                                 />
 
                                 <span
@@ -218,7 +218,7 @@ const Register = () => {
                                     {...register("confirmPass", {
                                         required: true,
                                     })}
-                                    className="input input-bordered input-info text-black"
+                                    className="input input-bordered input-info bg-transparent "
                                 />
                             </div>
                         </div>
@@ -231,7 +231,7 @@ const Register = () => {
                                 <input
                                     type="file"
                                     {...register("image", { required: true })}
-                                    className="file-input file-input-bordered text-black input-info w-full"
+                                    className="file-input file-input-bordered input-info bg-transparent w-full"
                                 />
                             </div>
                             <div className="form-control  mx-auto w-full">
@@ -242,7 +242,7 @@ const Register = () => {
                                     type="text"
                                     {...register("bio", { required: true })}
                                     placeholder="your bio"
-                                    className="textarea textarea-bordered textarea-info  text-black"
+                                    className="textarea textarea-bordered textarea-info bg-transparent "
                                 />
                             </div>
                         </div>
@@ -257,7 +257,7 @@ const Register = () => {
                             <input
                                 type="submit"
                                 value={"Register"}
-                                className="input input-bordered w-full hover:bg-transparent hover:text-info bg-info  my-7 input-info"
+                                className="input input-bordered w-full hover:bg-transparent hover:text-info bg-info  my-7 input-info bg-transparent"
                             />
                         </div>
 

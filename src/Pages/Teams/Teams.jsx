@@ -183,7 +183,7 @@ const Teams = () => {
                 </div>
                 <div>
                     <div className="overflow-x-auto w-full max-w-3xl mx-auto">
-                        <table className="table table-zebra">
+                        <table className="table ">
                             {/* head */}
                             <thead>
                                 <tr className="bg-slate-900 rounded-t-xl text-white">
