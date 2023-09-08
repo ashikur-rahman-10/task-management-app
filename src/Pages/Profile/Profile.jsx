@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Hooks/useAuth";
 import CustomLoader from "../../Components/customLoader/CustomLoader";
+import { Helmet } from "react-helmet-async";
 
 const Profile = () => {
     const [loggedUser, setLoggedUser] = useState([]);
@@ -58,6 +59,9 @@ const Profile = () => {
 
     return (
         <div className="w-full min-h-[90vh] flex items-center justify-center px-4">
+            <Helmet>
+                <title>Profile</title>
+            </Helmet>
             <div className="flex flex-col items-center justify-center">
                 <img
                     className="w-48 h-48 rounded-full mt-10 outline outline-success hover:scale-150 hover:rounded-sm duration-1000"

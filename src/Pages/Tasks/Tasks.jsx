@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TaskCard from "./TaskCard";
+import { Helmet } from "react-helmet-async";
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -60,6 +61,9 @@ const Tasks = () => {
 
     return (
         <div className="pt-8 w-full max-w-7xl mx-auto flex items-center justify-center">
+            <Helmet>
+                <title>Tasks</title>
+            </Helmet>
             <div>
                 <h1 className="text-3xl text-center my-8">All tasks</h1>
                 <div className="flex flex-col md:flex-row gap-4 justify-between items-center py-4 text-xs">

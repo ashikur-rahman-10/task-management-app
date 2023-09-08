@@ -5,10 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import loader from "../../assets/Rhombus.gif";
 
 const Register = () => {
     const [show, setShow] = useState(false);
     const [error, setError] = useState("");
+    const [wait, setWait] = useState(false);
     const { createUser, updateUser, logout } = useAuth();
     const navigate = useNavigate();
     const imageHostingUrl = `https://api.imgbb.com/1/upload?key=${
@@ -21,10 +23,9 @@ const Register = () => {
     } = useForm();
     const onSubmit = (data) => {
         const { name, email, password, photo, confirmPass, bio } = data;
-
         if (password === confirmPass) {
             const formData = new FormData();
-
+            setWait(true);
             formData.append("image", data.image[0]);
             fetch(imageHostingUrl, {
                 method: "POST",
@@ -62,9 +63,9 @@ const Register = () => {
                                             icon: "success",
                                             title: "User Created Successfully. Please Login to continue",
                                             showConfirmButton: false,
-                                            timer: 3000,
+                                            timer: 3200,
                                         });
-
+                                        setWait(false);
                                         setError("");
 
                                         logout()
@@ -93,6 +94,18 @@ const Register = () => {
             return;
         }
     };
+
+    if (wait) {
+        return (
+            <div className="absolute z-30 top-[60px] left-0 w-full bg-white min-h-[91vh] flex flex-col items-center justify-center">
+                <h1 className="text-2xl md:text-3xl">
+                    Please Wait few seconds.
+                </h1>
+                <p className="text-xl">Registering your profile.</p>
+                <img src={loader} alt="" />
+            </div>
+        );
+    }
 
     // Scroll to top
     window.scrollTo({

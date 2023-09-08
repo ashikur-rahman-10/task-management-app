@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const CreateTask = () => {
     const { user } = useAuth();
@@ -62,6 +63,10 @@ const CreateTask = () => {
 
     return (
         <div className="w-full min-h-[90vh] pt-8 flex items-center justify-center">
+            4
+            <Helmet>
+                <title>Create Task</title>
+            </Helmet>
             <div className="w-full rounded px-4 pt-6 pb-8 mb-4 flex flex-col justify-center items-center">
                 <h2 className="text-2xl md:text-4xl font-medium mb-8 text-center">
                     Create New Task

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -11,6 +12,9 @@ const Users = () => {
 
     return (
         <div className="py-8 px-4 md:px-0">
+            <Helmet>
+                <title>Users</title>
+            </Helmet>
             <h1 className="text-center text-2xl md:text-4xl py-8">ALL Users</h1>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {users.map((user) => (
