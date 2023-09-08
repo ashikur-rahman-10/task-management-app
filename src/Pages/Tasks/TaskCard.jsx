@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, json, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { FaArrowRight, FaEdit, FaTrashAlt } from "react-icons/fa";
+import useAuth from "../../Hooks/useAuth";
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, onDelete }) => {
+    const [loggedUser, SetLoggedUser] = useState([]);
+    const { user } = useAuth();
     const { title, dueDate, priority, assignedTo, id, status } = task;
+    const navigate = useNavigate();
 
     // Define a CSS class based on the priority level
     let priorityClass = "";
@@ -68,6 +73,40 @@ const TaskCard = ({ task }) => {
         document.getElementById(`${id}`).close();
     };
 
+    // Function to delete a task
+    const handleDelete = () => {
+        Swal.fire({
+            text: "Are you sure you want to delete this task?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Delete the task
+                onDelete(id);
+
+                Swal.fire("Deleted!", "The task has been deleted.", "success");
+            }
+        });
+    };
+
+    const handleNavigate = (id) => {
+        navigate(`/task-details/${id}`);
+    };
+
+    useEffect(() => {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const filteredUser = users.find((u) => u?.email == user?.email);
+        SetLoggedUser(filteredUser);
+    }, [user?.email]);
+
+    // Function to determine if the buttons should be disabled
+    const areButtonsDisabled = () => {
+        return loggedUser?.teamName !== assignedTo;
+    };
+
     return (
         <div
             className={`border p-5 rounded-lg w-72 space-y-2 shadow-md ${shadowColor}`}
@@ -86,17 +125,41 @@ const TaskCard = ({ task }) => {
             </div>
             <div className="w-full flex justify-end gap-4">
                 <button
-                    className="py-1 px-4 rounded-2xl bg-yellow-400 text-white font-medium hover:bg-yellow-600 hover:scale-105 text-xs"
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                        areButtonsDisabled()
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "bg-yellow-400 text-white"
+                    } font-medium hover:bg-yellow-600 hover:scale-110 text-xs`}
                     onClick={() => document.getElementById(`${id}`).showModal()}
+                    disabled={areButtonsDisabled()}
                 >
-                    Change Status
+                    <FaEdit className="text-lg"></FaEdit>
                 </button>
-                <Link
-                    to={`/task-details/${id}`}
-                    className="py-1 px-4 rounded-2xl bg-info text-white font-medium hover:bg-blue-600 hover:scale-105"
+                <button
+                    className={`w-8 h-8 flex items-center justify-center rounded-full ${
+                        areButtonsDisabled()
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : "bg-red-500 text-white"
+                    } font-medium hover:bg-red-600 hover:scale-110 text-xs`}
+                    onClick={handleDelete}
+                    disabled={areButtonsDisabled()}
                 >
-                    Details
-                </Link>
+                    <FaTrashAlt className="text-lg"></FaTrashAlt>
+                </button>
+
+                <button
+                    onClick={() => {
+                        handleNavigate(id);
+                    }}
+                    className={`py-1 flex gap-1 items-center px-4 rounded-2xl bg-info text-xs text-white font-medium hover:bg-blue-600 hover:scale-105 ${
+                        areButtonsDisabled()
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : ""
+                    }`}
+                    disabled={areButtonsDisabled()}
+                >
+                    Details <FaArrowRight></FaArrowRight>
+                </button>
             </div>
             {/* Open the modal using document.getElementById('ID').showModal() method */}
             <dialog id={id} className="modal modal-bottom sm:modal-middle">
@@ -138,7 +201,6 @@ const TaskCard = ({ task }) => {
                         <div className="w-full flex justify-end items-end">
                             <button
                                 className="px-2 py-1 rounded-md bg-slate-100 hover:bg-slate-200 hover:scale-105"
-                                // onClick={handleStatusChange}
                                 type="submit"
                             >
                                 Save

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../Hooks/useAuth";
+import CustomLoader from "../../Components/customLoader/CustomLoader";
 
 const Profile = () => {
-    const [loggedUser, setLoggedUser] = useState(null);
+    const [loggedUser, setLoggedUser] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user } = useAuth();
     // console.log(userEmail);
@@ -12,7 +13,6 @@ const Profile = () => {
 
         // Find the user with the matching email
         const matchedUser = users.find((u) => u.email == user?.email);
-        // console.log(matchedUser);
 
         if (matchedUser) {
             // Set the user state to the matched user
@@ -22,11 +22,7 @@ const Profile = () => {
     }, [user]);
 
     if (loading) {
-        return (
-            <div className="w-full min-h-[100vh] flex items-center justify-center">
-                Loading...
-            </div>
-        );
+        return <CustomLoader></CustomLoader>;
     }
 
     const handleSubmit = (event) => {
@@ -83,6 +79,7 @@ const Profile = () => {
                 <div className="mt-8">
                     <h2 className="text-2xl">Name: {loggedUser?.name}</h2>
                     <p className="text-xl">Email: {loggedUser?.email}</p>
+                    <p className="text-xl">Team: {loggedUser?.teamName}</p>
                 </div>
             </div>
 

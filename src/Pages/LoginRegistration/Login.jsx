@@ -33,7 +33,7 @@ const Login = () => {
                 });
                 console.log({ result });
                 navigate(from);
-                window.location.reload();
+                console.log(from);
             })
             .catch((error) => {
                 setError(error.message);

@@ -52,6 +52,12 @@ const Tasks = () => {
         setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     };
 
+    const handleDeleteTask = (taskId) => {
+        const updatedTasks = tasks.filter((task) => task.id !== taskId);
+        localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+        setTasks(updatedTasks);
+    };
+
     return (
         <div className="pt-8 w-full max-w-7xl mx-auto flex items-center justify-center">
             <div>
@@ -94,7 +100,11 @@ const Tasks = () => {
                 {sortedTasks.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-4">
                         {sortedTasks.map((t) => (
-                            <TaskCard key={t.id} task={t}></TaskCard>
+                            <TaskCard
+                                key={t.id}
+                                task={t}
+                                onDelete={handleDeleteTask}
+                            ></TaskCard>
                         ))}
                     </div>
                 ) : (

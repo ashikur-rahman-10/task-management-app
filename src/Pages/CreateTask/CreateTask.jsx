@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "../../Hooks/useAuth";
-import Swal from "sweetalert2"; // Import SweetAlert2
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const CreateTask = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    const [teams, setTeams] = useState([]);
+    const [selectedTeam, setSelectedTeam] = useState("");
+
+    useEffect(() => {
+        // Retrieve the list of teams from local storage or initialize an empty array
+        const storedTeams = JSON.parse(localStorage.getItem("teams")) || [];
+        setTeams(storedTeams);
+    }, []);
 
     const handleSubmit = (e) => {
         if (!user) {
@@ -24,29 +33,23 @@ const CreateTask = () => {
         const description = form.description.value;
         const dueDate = form.dueDate.value;
         const priority = form.priority.value;
-        const assignedTo = form.assignedTo.value;
         const newTask = {
             title,
             description,
             dueDate,
             priority,
-            assignedTo,
+            assignedTo: selectedTeam,
             status: "Pending",
             taskCreatedBy: user?.displayName,
             id: new Date().getTime(),
         };
-        // Get the existing tasks array from local storage or initialize an empty array
         const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-        // Add the new user to the array
         tasks.push(newTask);
-
-        // Save the updated array of tasks back to local storage
         localStorage.setItem("tasks", JSON.stringify(tasks));
 
         form.reset();
 
-        // Show the SweetAlert2 for successful task creation
         Swal.fire({
             icon: "success",
             title: "Success",
@@ -59,7 +62,7 @@ const CreateTask = () => {
 
     return (
         <div className="w-full min-h-[90vh] pt-8 flex items-center justify-center">
-            <div className=" w-full rounded px-4 pt-6 pb-8 mb-4 flex flex-col justify-center items-center">
+            <div className="w-full rounded px-4 pt-6 pb-8 mb-4 flex flex-col justify-center items-center">
                 <h2 className="text-2xl md:text-4xl font-medium mb-8 text-center">
                     Create New Task
                 </h2>
@@ -130,7 +133,7 @@ const CreateTask = () => {
                             High
                         </div>
                     </div>
-                    <div className="md:w-[450px] w-full px-4">
+                    {/* <div className="md:w-[450px] w-full px-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">
                             Assigned To:
                         </label>
@@ -140,6 +143,26 @@ const CreateTask = () => {
                             required
                             className="input input-info w-full"
                         />
+                    </div> */}
+                    <div className="md:w-[450px] w-full px-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                            Assigned Team:
+                        </label>
+                        <select
+                            name="assignedTeam"
+                            value={selectedTeam}
+                            onChange={(e) => setSelectedTeam(e.target.value)}
+                            className="input input-info w-full"
+                        >
+                            <option value="" disabled>
+                                Select a Team
+                            </option>
+                            {teams.map((team) => (
+                                <option key={team.id} value={team.name}>
+                                    {team.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="text-center">
                         <button

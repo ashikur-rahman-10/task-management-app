@@ -39,6 +39,7 @@ const Register = () => {
                             email,
                             photoURL: imgUrl,
                             bio,
+                            id: new Date().getTime(),
                         };
 
                         // Get the existing users array from local storage or initialize an empty array
@@ -212,9 +213,7 @@ const Register = () => {
                         <div className="md:flex md:gap-5">
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text text-white">
-                                        Photo
-                                    </span>
+                                    <span className="label-text ">Photo</span>
                                 </label>
                                 <input
                                     type="file"

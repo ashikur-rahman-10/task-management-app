@@ -1,9 +1,13 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
+import CustomLoader from "../customLoader/CustomLoader";
 
 const NavigationBar = () => {
-    const { user, logout } = useAuth();
+    const { user, logout, loading } = useAuth();
+    if (loading) {
+        return <CustomLoader></CustomLoader>;
+    }
     const navigate = useNavigate();
     const handleLogout = () => {
         logout()
@@ -28,7 +32,9 @@ const NavigationBar = () => {
             </li>
 
             <li>
-                <a>Item 3</a>
+                <Link to={"/teams"} className="hover:text-info">
+                    Teams
+                </Link>
             </li>
             <li>
                 {user && (
@@ -94,7 +100,7 @@ const NavigationBar = () => {
                             >
                                 <Link
                                     to={"/profile"}
-                                    className="w-10 outline outline-success rounded-full"
+                                    className="w-10 h-10 outline outline-success rounded-full"
                                 >
                                     {user.photoURL ? (
                                         <img
