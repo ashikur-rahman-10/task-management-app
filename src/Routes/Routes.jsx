@@ -8,6 +8,8 @@ import Tasks from "../Pages/Tasks/Tasks";
 import TaskDetails from "../Pages/TaskDetails/TaskDetails";
 import Teams from "../Pages/Teams/Teams";
 import PrivateRoute from "./PrivateRoute";
+import Dashboard from "../Pages/Dashboard/Dashboard";
+import Users from "../Pages/Dashboard/Users";
 
 const router = createBrowserRouter([
     {
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
                 element: <CreateTask></CreateTask>,
             },
             {
-                path: "/",
+                path: "/tasks",
                 element: <Tasks></Tasks>,
             },
             {
@@ -45,6 +47,14 @@ const router = createBrowserRouter([
                         <Teams></Teams>
                     </PrivateRoute>
                 ),
+            },
+            {
+                path: "/",
+                element: <Dashboard></Dashboard>,
+            },
+            {
+                path: "/users",
+                element: <Users></Users>,
             },
         ],
     },

@@ -5,10 +5,10 @@ import CustomLoader from "../customLoader/CustomLoader";
 
 const NavigationBar = () => {
     const { user, logout, loading } = useAuth();
+    const navigate = useNavigate();
     if (loading) {
         return <CustomLoader></CustomLoader>;
     }
-    const navigate = useNavigate();
     const handleLogout = () => {
         logout()
             .then((result) => {
@@ -22,7 +22,13 @@ const NavigationBar = () => {
         <>
             <li>
                 <Link to={"/"} className="hover:text-info">
-                    Home
+                    Dashboard
+                </Link>
+            </li>
+
+            <li>
+                <Link to={"/tasks"} className="hover:text-info">
+                    Tasks
                 </Link>
             </li>
             <li>
