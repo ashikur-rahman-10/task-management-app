@@ -1,78 +1,125 @@
 import React, { createContext, useEffect, useState } from "react";
 import {
-    GoogleAuthProvider,
-    createUserWithEmailAndPassword,
-    getAuth,
-    onAuthStateChanged,
-    sendPasswordResetEmail,
-    signInWithEmailAndPassword,
-    signInWithPopup,
-    signOut,
-    updateProfile,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
 } from "firebase/auth";
 import app from "../Firebase/Firebase.init";
+import axios from "axios";
+
 export const AuthContext = createContext();
+const AuthProviders = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const AuthProvider = ({ children }) => {
-    const auth = getAuth(app);
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const googleProvider = new GoogleAuthProvider();
+  const auth = getAuth(app);
 
-    // Create user with Email
-    const createUser = (email, password) => {
-        return createUserWithEmailAndPassword(auth, email, password);
-    };
+  const googleProvider = new GoogleAuthProvider();
 
-    // Update User profile
-    const updateUser = (name, photo) => {
-        setLoading(true);
-        return updateProfile(auth.currentUser, {
-            displayName: name,
-            photoURL: photo,
-        });
-    };
+  // Create User
+  const createUser = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
-    // Login With email and password
-    const loginWithPass = (email, password) => {
-        return signInWithEmailAndPassword(auth, email, password);
-    };
-    // Logout
-    const logout = () => {
-        return signOut(auth);
-    };
+  // Sign In an user with Password
+  const login = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-    const passwordReset = (email) => {
-        return sendPasswordResetEmail(auth, email);
-    };
+  // Sign In an user with Google
+  const loginWithGoogle = () => {
+    return signInWithPopup(auth, googleProvider);
+  };
 
-    // Google login
-    const googleLogin = () => {
-        return signInWithPopup(auth, googleProvider);
-    };
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser);
-            setLoading(false);
-        });
-        return () => {
-            return unsubscribe();
-        };
-    }, []);
+  // Login With email and password
+  const loginWithPass = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-    const authInfo = {
-        user,
-        logout,
-        updateUser,
-        createUser,
-        loading,
-        loginWithPass,
-        passwordReset,
-        googleLogin,
+  const passwordReset = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+  // Logout User
+  const logout = () => {
+    return signOut(auth);
+  };
+
+  // UpdateUserProfile
+  const updateUser = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
+
+  const verification = (user) => {
+    if (user) {
+      return sendEmailVerification(user);
+    } else {
+      return Promise.reject(new Error("User is not authenticated."));
+    }
+  };
+
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
+  // use onauthState change
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    // const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    //     setUser(currentUser);
+
+    //     if (currentUser) {
+    //         axios
+    //             .post("http://localhost:5000/jwt", {
+    //                 email: currentUser.email,
+    //             })
+    //             .then((data) => {
+    //                 if (data.data) {
+    //                     localStorage.setItem(
+    //                         "access-token",
+    //                         data.data.token
+    //                     );
+    //                 }
+    //             });
+    //     } else {
+    //         localStorage.removeItem("access-token");
+    //     }
+    //     setLoading(false);
+    // });
+    return () => {
+      unsubscribe();
     };
-    return (
-        <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
-    );
+  }, []);
+
+  const authInfo = {
+    user,
+    createUser,
+    updateUser,
+    login,
+    loginWithGoogle,
+    logout,
+    loading,
+    verification,
+    resetPassword,
+    passwordReset,
+    loginWithPass,
+  };
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
-export default AuthProvider;
+export default AuthProviders;
