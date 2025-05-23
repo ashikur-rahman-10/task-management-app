@@ -55,7 +55,7 @@ const Workspace = () => {
     try {
       setIsUpdating(true);
       const res = await fetch(
-        `http://localhost:5000/works-spaces/shared/${id}`,
+        `https://todayahead.vercel.app/works-spaces/shared/${id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -97,7 +97,7 @@ const Workspace = () => {
 
     try {
       setIsUpdating(true);
-      const res = await fetch(`http://localhost:5000/teams`, {
+      const res = await fetch(`https://todayahead.vercel.app/teams`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -148,9 +148,12 @@ const Workspace = () => {
     if (result.isConfirmed) {
       try {
         setIsUpdating(true);
-        const res = await fetch(`http://localhost:5000/teams/${teamId}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `https://todayahead.vercel.app/teams/${teamId}`,
+          {
+            method: "DELETE",
+          }
+        );
         const data = await res.json();
 
         if (data.modifiedCount > 0) {
@@ -181,11 +184,14 @@ const Workspace = () => {
     event.stopPropagation();
     try {
       setIsUpdating(true);
-      const res = await fetch(`http://localhost:5000/teams/${teamId}/members`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const res = await fetch(
+        `https://todayahead.vercel.app/teams/${teamId}/members`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }
+      );
       const data = await res.json();
       if (data.modifiedCount > 0) {
         toast.success("Member Removed Successfully");
@@ -220,7 +226,7 @@ const Workspace = () => {
     try {
       setIsUpdating(true);
       const res = await fetch(
-        `http://localhost:5000/teams/${addMembersTeamId}/add-members`,
+        `https://todayahead.vercel.app/teams/${addMembersTeamId}/add-members`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -263,11 +269,14 @@ const Workspace = () => {
 
     try {
       setIsUpdating(true);
-      const res = await fetch(`http://localhost:5000/teams/${renameTeamId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ teamName: newTeamName }),
-      });
+      const res = await fetch(
+        `https://todayahead.vercel.app/teams/${renameTeamId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ teamName: newTeamName }),
+        }
+      );
       const result = await res.json();
       if (result.modifiedCount > 0) {
         toast.success("Team Renamed Successfully");
@@ -475,7 +484,11 @@ const Workspace = () => {
       {/* Create Team Modal */}
       <dialog id="team_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <form onSubmit={handleCreateTeam} className="space-y-4">
+          <form
+            onSubmit={handleCreateTeam}
+            autoComplete="off"
+            className="space-y-4"
+          >
             <h3 className="font-bold text-lg">Create New Team</h3>
             <div className="w-full">
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -540,7 +553,11 @@ const Workspace = () => {
         className="modal modal-bottom sm:modal-middle"
       >
         <div className="modal-box">
-          <form onSubmit={handleAddMembers} className="space-y-4">
+          <form
+            onSubmit={handleAddMembers}
+            autoComplete="off"
+            className="space-y-4"
+          >
             <h3 className="font-bold text-lg">Add Members to Team</h3>
             <div className="w-full">
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -600,7 +617,11 @@ const Workspace = () => {
       {/* Rename Team Modal */}
       <dialog id="rename_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <form onSubmit={handleRenameTeam} className="space-y-4">
+          <form
+            onSubmit={handleRenameTeam}
+            autoComplete="off"
+            className="space-y-4"
+          >
             <h3 className="font-bold text-lg">Rename Team</h3>
             <div className="w-full">
               <label className="block text-gray-700 text-sm font-bold mb-2">

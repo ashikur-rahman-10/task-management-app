@@ -4,25 +4,25 @@ import axios from "axios";
 import useAuth from "./UseAuth";
 
 const UseAxiosSecure = () => {
-    const { logout } = useAuth();
-    const navigate = useNavigate();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-    const axiosSecure = axios.create({
-        // baseURL: "https://ihp-inv.vercel.app",
-        baseURL: "http://localhost:5000",
-    });
+  const axiosSecure = axios.create({
+    baseURL: "https://todayahead.vercel.app",
+    // baseURL: "http://localhost:5000",
+  });
 
-   useEffect(() => {
+  useEffect(() => {
     axiosSecure.interceptors.response.use(
       (response) => response,
       async (error) => {
         console.log(error);
-       
+
         return Promise.reject(error);
       }
     );
-  }, [ navigate, axiosSecure]);
+  }, [navigate, axiosSecure]);
   return [axiosSecure];
 };
-  
+
 export default UseAxiosSecure;

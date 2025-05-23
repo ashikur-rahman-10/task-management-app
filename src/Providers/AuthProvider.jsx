@@ -83,7 +83,7 @@ const AuthProviders = ({ children }) => {
 
     //     if (currentUser) {
     //         axios
-    //             .post("http://localhost:5000/jwt", {
+    //             .post("https://todayahead.vercel.app/jwt", {
     //                 email: currentUser.email,
     //             })
     //             .then((data) => {

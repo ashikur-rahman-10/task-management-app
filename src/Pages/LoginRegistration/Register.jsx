@@ -57,7 +57,7 @@ const Register = () => {
           };
 
           // Save to backend
-          fetch("http://localhost:5000/users/", {
+          fetch("https://todayahead.vercel.app/users/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -120,6 +120,7 @@ const Register = () => {
         <div className="p-4 w-full max-w-4xl md:ml-20">
           <form
             onSubmit={handleSubmit(onSubmit)}
+            autoComplete="off"
             className="shadow-md shadow-[#9BC1DE] rounded-xl md:p-10 p-6"
           >
             <h1 className="text-center md:text-4xl text-2xl my-10 md:my-5">

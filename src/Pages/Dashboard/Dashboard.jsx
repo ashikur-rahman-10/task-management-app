@@ -51,7 +51,7 @@ const Dashboard = () => {
       };
 
       try {
-        const res = await fetch("http://localhost:5000/works-spaces", {
+        const res = await fetch("https://todayahead.vercel.app/works-spaces", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newWorkspace),
@@ -86,9 +86,12 @@ const Dashboard = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:5000/works-spaces/${id}`, {
-          method: "DELETE",
-        });
+        const res = await fetch(
+          `https://todayahead.vercel.app/works-spaces/${id}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         const data = await res.json();
         if (data.deletedCount > 0) {
@@ -124,7 +127,7 @@ const Dashboard = () => {
     if (newName && newName !== workspace.worksSpaceName) {
       try {
         const res = await fetch(
-          `http://localhost:5000/works-spaces/${workspace._id}`,
+          `https://todayahead.vercel.app/works-spaces/${workspace._id}`,
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },

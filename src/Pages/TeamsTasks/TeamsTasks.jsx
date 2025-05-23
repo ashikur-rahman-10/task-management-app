@@ -34,7 +34,9 @@ const TeamsTasks = () => {
     const fetchTasks = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/tasks?teamId=${teamId}`);
+        const res = await fetch(
+          `https://todayahead.vercel.app/tasks?teamId=${teamId}`
+        );
         const data = await res.json();
         if (Array.isArray(data)) setTasks(data);
         else throw new Error("Failed to fetch tasks");
@@ -47,7 +49,7 @@ const TeamsTasks = () => {
 
     const fetchTeam = () => {
       setIsLoading(true);
-      fetch(`http://localhost:5000/teams/${teamId}`)
+      fetch(`https://todayahead.vercel.app/teams/${teamId}`)
         .then((res) => res.json())
         .then((result) => {
           setTeams(result);
@@ -132,8 +134,8 @@ const TeamsTasks = () => {
     setIsLoading(true);
     try {
       const url = editTask
-        ? `http://localhost:5000/tasks/${editTask._id}`
-        : "http://localhost:5000/tasks";
+        ? `https://todayahead.vercel.app/tasks/${editTask._id}`
+        : "https://todayahead.vercel.app/tasks";
       const method = editTask ? "PATCH" : "POST";
       const res = await fetch(url, {
         method,
@@ -170,7 +172,7 @@ const TeamsTasks = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5000/tasks/${taskId}?taskCreatedBy=${user.email}`,
+        `https://todayahead.vercel.app/tasks/${taskId}?taskCreatedBy=${user.email}`,
         { method: "DELETE" }
       );
       const result = await res.json();
@@ -200,11 +202,14 @@ const TeamsTasks = () => {
   const handleStatusChange = async (taskId, newStatus) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/tasks/${taskId}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus, userEmail: user.email }),
-      });
+      const res = await fetch(
+        `https://todayahead.vercel.app/tasks/${taskId}/status`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus, userEmail: user.email }),
+        }
+      );
       const result = await res.json();
       if (result.modifiedCount > 0) {
         toast.success("Status updated");
@@ -320,7 +325,11 @@ const TeamsTasks = () => {
           <h2 className="text-xl font-bold mb-4">
             {editTask ? "Edit Task" : "New Task"}
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          <form
+            onSubmit={handleSubmit}
+            autoComplete="off"
+            className="space-y-4 text-xs"
+          >
             <div>
               <label className="block font-medium">Title</label>
               <input

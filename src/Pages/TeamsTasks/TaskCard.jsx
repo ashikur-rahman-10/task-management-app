@@ -126,7 +126,11 @@ const TaskCard = ({
       <dialog id={`status-${_id}`} className="modal">
         <div className="modal-box p-4">
           <h2 className="font-bold">{title}</h2>
-          <form onSubmit={handleStatusChange} className="space-y-2">
+          <form
+            onSubmit={handleStatusChange}
+            autoComplete="off"
+            className="space-y-2"
+          >
             <label className="block font-medium">Status</label>
             <div className="space-x-4">
               {["Pending", "In Progress", "Completed"].map((s) => (

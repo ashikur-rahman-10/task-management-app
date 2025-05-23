@@ -92,6 +92,7 @@ const Login = () => {
         <div className="md:w-1/2 p-4 w-full max-w-md md:ml-20">
           <form
             onSubmit={handleSubmit(onSubmit)}
+            autoComplete="off"
             className="shadow-md shadow-[#9BC1DE]  rounded-xl  md:p-10 p-6 "
           >
             <h1 className="text-center md:text-4xl text-2xl my-10">Login</h1>
