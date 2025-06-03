@@ -8,7 +8,7 @@ const UseWorksSpaces = () => {
   const { data: worksSpaces = [], refetch: worksSpacesRefetch } = useQuery({
     queryKey: ["worksSpaces"],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/works-spaces`);
+      const res = await axiosSecure.get(`/workspaces`);
       return res.data;
     },
   });

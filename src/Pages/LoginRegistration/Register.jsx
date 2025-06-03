@@ -57,7 +57,7 @@ const Register = () => {
           };
 
           // Save to backend
-          fetch("https://todayahead.vercel.app/users/", {
+          fetch("https://todays-ahead.vercel.app/users/", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

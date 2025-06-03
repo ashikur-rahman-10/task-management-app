@@ -8,6 +8,7 @@ import UseTeamByID from "../../Hooks/UseTeamByID";
 import { FaTrash, FaEdit, FaUsers, FaUserPlus } from "react-icons/fa";
 import { toast, Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
+import CustomLoader from "../../Components/customLoader/CustomLoader";
 
 const Workspace = () => {
   const { user } = useAuth();
@@ -55,7 +56,7 @@ const Workspace = () => {
     try {
       setIsUpdating(true);
       const res = await fetch(
-        `https://todayahead.vercel.app/works-spaces/shared/${id}`,
+        `https://todays-ahead.vercel.app/workspaces/shared/${id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -97,7 +98,7 @@ const Workspace = () => {
 
     try {
       setIsUpdating(true);
-      const res = await fetch(`https://todayahead.vercel.app/teams`, {
+      const res = await fetch(`https://todays-ahead.vercel.app/teams`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -149,7 +150,7 @@ const Workspace = () => {
       try {
         setIsUpdating(true);
         const res = await fetch(
-          `https://todayahead.vercel.app/teams/${teamId}`,
+          `https://todays-ahead.vercel.app/teams/${teamId}`,
           {
             method: "DELETE",
           }
@@ -185,7 +186,7 @@ const Workspace = () => {
     try {
       setIsUpdating(true);
       const res = await fetch(
-        `https://todayahead.vercel.app/teams/${teamId}/members`,
+        `https://todays-ahead.vercel.app/teams/${teamId}/members`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -226,7 +227,7 @@ const Workspace = () => {
     try {
       setIsUpdating(true);
       const res = await fetch(
-        `https://todayahead.vercel.app/teams/${addMembersTeamId}/add-members`,
+        `https://todays-ahead.vercel.app/teams/${addMembersTeamId}/add-members`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -270,7 +271,7 @@ const Workspace = () => {
     try {
       setIsUpdating(true);
       const res = await fetch(
-        `https://todayahead.vercel.app/teams/${renameTeamId}`,
+        `https://todays-ahead.vercel.app/teams/${renameTeamId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -300,10 +301,9 @@ const Workspace = () => {
     navigate(`/teams/${teamId}`);
   };
 
-  if (isLoading) return <div>Loading workspace...</div>;
-  if (error)
-    return <div>Error: {error.message || "Failed to load workspace"}</div>;
-  if (!thisWorksSpace) return <div>Workspace not found</div>;
+  if (isLoading || !worksSpaces || !teams || !thisWorksSpace) {
+    return <CustomLoader />;
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto py-8 px-4">

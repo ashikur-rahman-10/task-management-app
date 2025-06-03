@@ -22,7 +22,7 @@ const GoogleLogin = () => {
           email,
         };
         const token = localStorage.getItem("access-token");
-        fetch("https://todayahead.vercel.app/users", {
+        fetch("https://todays-ahead.vercel.app/users", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

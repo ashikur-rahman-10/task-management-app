@@ -6,6 +6,7 @@ import useAuth from "../../Hooks/UseAuth";
 import UseUsers from "../../Hooks/UseUsers";
 import TaskCard from "./TaskCard";
 import UseWorksSpaces from "../../Hooks/UseWorksSpaces";
+import CustomLoader from "../../Components/customLoader/CustomLoader";
 
 const TeamsTasks = () => {
   const { id } = useParams();
@@ -35,13 +36,12 @@ const TeamsTasks = () => {
       setIsLoading(true);
       try {
         const res = await fetch(
-          `https://todayahead.vercel.app/tasks?teamId=${teamId}`
+          `https://todays-ahead.vercel.app/tasks/teams/${teamId}`
         );
         const data = await res.json();
         if (Array.isArray(data)) setTasks(data);
         else throw new Error("Failed to fetch tasks");
       } catch (error) {
-        toast.error("Failed to load tasks");
       } finally {
         setIsLoading(false);
       }
@@ -49,14 +49,14 @@ const TeamsTasks = () => {
 
     const fetchTeam = () => {
       setIsLoading(true);
-      fetch(`https://todayahead.vercel.app/teams/${teamId}`)
+      fetch(`https://todays-ahead.vercel.app/teams/${teamId}`)
         .then((res) => res.json())
         .then((result) => {
           setTeams(result);
           if (Array.isArray(result.members)) setTeamMembers(result.members);
           else throw new Error("No team members");
         })
-        .catch(() => toast.error("Failed to load team"))
+        .catch()
         .finally(() => setIsLoading(false));
     };
 
@@ -67,7 +67,6 @@ const TeamsTasks = () => {
   const workspaceId = teams.workspaceId;
 
   const thisWorksSpace = worksSpaces?.find((w) => w?._id === workspaceId);
-  console.log(thisWorksSpace);
 
   // Filtering and Sorting Logic
   useEffect(() => {
@@ -134,8 +133,8 @@ const TeamsTasks = () => {
     setIsLoading(true);
     try {
       const url = editTask
-        ? `https://todayahead.vercel.app/tasks/${editTask._id}`
-        : "https://todayahead.vercel.app/tasks";
+        ? `https://todays-ahead.vercel.app/tasks/${editTask._id}`
+        : "https://todays-ahead.vercel.app/tasks";
       const method = editTask ? "PATCH" : "POST";
       const res = await fetch(url, {
         method,
@@ -172,7 +171,7 @@ const TeamsTasks = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `https://todayahead.vercel.app/tasks/${taskId}?taskCreatedBy=${user.email}`,
+        `https://todays-ahead.vercel.app/tasks/${taskId}?taskCreatedBy=${user.email}`,
         { method: "DELETE" }
       );
       const result = await res.json();
@@ -203,7 +202,7 @@ const TeamsTasks = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `https://todayahead.vercel.app/tasks/${taskId}/status`,
+        `https://todays-ahead.vercel.app/tasks/${taskId}/status`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -238,6 +237,10 @@ const TeamsTasks = () => {
     const member = users.find((u) => u.email === email);
     return member?.name || email;
   };
+
+  if (isLoading || !tasks) {
+    return <CustomLoader />;
+  }
 
   return (
     <div className="p-4 max-w-7xl w-full mx-auto">

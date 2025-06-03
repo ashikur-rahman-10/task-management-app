@@ -17,6 +17,8 @@ const Dashboard = () => {
     (w) => w.creatorEmail === user?.email || w.sharedWith.includes(user?.email)
   );
 
+  console.log(filtered.creatorEmail);
+
   const handleCreateWorkspace = async () => {
     const { value: workspaceName } = await Swal.fire({
       title: "Create New Workspace",
@@ -51,7 +53,7 @@ const Dashboard = () => {
       };
 
       try {
-        const res = await fetch("https://todayahead.vercel.app/works-spaces", {
+        const res = await fetch("https://todays-ahead.vercel.app/workspaces", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newWorkspace),
@@ -87,7 +89,7 @@ const Dashboard = () => {
     if (result.isConfirmed) {
       try {
         const res = await fetch(
-          `https://todayahead.vercel.app/works-spaces/${id}`,
+          `https://todays-ahead.vercel.app/workspaces/${id}`,
           {
             method: "DELETE",
           }
@@ -127,7 +129,7 @@ const Dashboard = () => {
     if (newName && newName !== workspace.worksSpaceName) {
       try {
         const res = await fetch(
-          `https://todayahead.vercel.app/works-spaces/${workspace._id}`,
+          `https://todays-ahead.vercel.app/workspaces/${workspace._id}`,
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -182,22 +184,24 @@ const Dashboard = () => {
             </Link>
 
             {/* Action Buttons */}
-            <div className="absolute top-2 right-2 flex gap-2">
-              <button
-                onClick={() => handleRenameWorkspace(w)}
-                className="text-blue-700 hover:text-blue-900"
-                title="Rename"
-              >
-                <FiEdit />
-              </button>
-              <button
-                onClick={() => handleDeleteWorkspace(w._id)}
-                className="text-red-600 hover:text-red-800"
-                title="Delete"
-              >
-                <FiTrash2 />
-              </button>
-            </div>
+            {user.email == w.creatorEmail && (
+              <div className="absolute top-2 right-2 flex gap-2">
+                <button
+                  onClick={() => handleRenameWorkspace(w)}
+                  className="text-blue-700 hover:text-blue-900"
+                  title="Rename"
+                >
+                  <FiEdit />
+                </button>
+                <button
+                  onClick={() => handleDeleteWorkspace(w._id)}
+                  className="text-red-600 hover:text-red-800"
+                  title="Delete"
+                >
+                  <FiTrash2 />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

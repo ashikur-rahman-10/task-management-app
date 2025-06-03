@@ -8,7 +8,7 @@ const UseAxiosSecure = () => {
   const navigate = useNavigate();
 
   const axiosSecure = axios.create({
-    baseURL: "https://todayahead.vercel.app",
+    baseURL: "https://todays-ahead.vercel.app",
     // baseURL: "http://localhost:5000",
   });
 
