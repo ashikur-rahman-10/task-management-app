@@ -17,17 +17,12 @@ const TeamsTasks = () => {
   const { users, isLoading: usersLoading } = UseUsers();
 
   const [tasks, setTasks] = useState([]);
-  const [filteredTasks, setFilteredTasks] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [teams, setTeams] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [editTask, setEditTask] = useState(null);
-
-  // Filter/Sort State
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [priorityFilter, setPriorityFilter] = useState("All");
-  const [sortOrder, setSortOrder] = useState("Newest");
+  const [sortOrder, setSortOrder] = useState("desc"); // Default sort order: descending
 
   useEffect(() => {
     if (!teamId) return;
@@ -39,9 +34,19 @@ const TeamsTasks = () => {
           `https://todays-ahead.vercel.app/tasks/teams/${teamId}`
         );
         const data = await res.json();
-        if (Array.isArray(data)) setTasks(data);
-        else throw new Error("Failed to fetch tasks");
+        if (Array.isArray(data)) {
+          // Sort tasks by creation time
+          const sortedTasks = data.sort((a, b) =>
+            sortOrder === "desc"
+              ? new Date(b.createdAt) - new Date(a.createdAt)
+              : new Date(a.createdAt) - new Date(b.createdAt)
+          );
+          setTasks(sortedTasks);
+        } else {
+          throw new Error("Failed to fetch tasks");
+        }
       } catch (error) {
+        toast.error("Failed to fetch tasks");
       } finally {
         setIsLoading(false);
       }
@@ -56,44 +61,22 @@ const TeamsTasks = () => {
           if (Array.isArray(result.members)) setTeamMembers(result.members);
           else throw new Error("No team members");
         })
-        .catch()
+        .catch(() => toast.error("Failed to fetch team"))
         .finally(() => setIsLoading(false));
     };
 
     fetchTasks();
     fetchTeam();
-  }, [teamId]);
+  }, [teamId, sortOrder]); // Add sortOrder to dependencies
 
   const workspaceId = teams.workspaceId;
 
   const thisWorksSpace = worksSpaces?.find((w) => w?._id === workspaceId);
 
-  // Filtering and Sorting Logic
-  useEffect(() => {
-    let updated = [...tasks];
-
-    if (statusFilter !== "All") {
-      updated = updated.filter((task) => task.status === statusFilter);
-    }
-
-    if (priorityFilter !== "All") {
-      updated = updated.filter((task) => task.priority === priorityFilter);
-    }
-
-    if (sortOrder === "Newest") {
-      updated.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
-    } else if (sortOrder === "Oldest") {
-      updated.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-    } else if (sortOrder === "HighPriority") {
-      const order = { High: 1, Medium: 2, Low: 3 };
-      updated.sort((a, b) => order[a.priority] - order[b.priority]);
-    } else if (sortOrder === "LowPriority") {
-      const order = { High: 1, Medium: 2, Low: 3 };
-      updated.sort((a, b) => order[b.priority] - order[a.priority]);
-    }
-
-    setFilteredTasks(updated);
-  }, [tasks, statusFilter, priorityFilter, sortOrder]);
+  // Handle sort order change
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,24 +93,25 @@ const TeamsTasks = () => {
 
     const form = e.target;
     const title = form.title.value.trim();
-    const description = form.description.value.trim();
+    const notes = form.notes.value.trim();
     const dueDate = form.dueDate.value;
     const priority = form.priority.value;
 
-    if (!title || !description || !dueDate || !priority) {
+    if (!title || !notes || !dueDate || !priority) {
       toast.error("All fields are required");
       return;
     }
 
     const taskData = {
       title,
-      description,
+      notes,
       dueDate,
       priority,
       assignedTo: selectedMembers,
       status: editTask ? editTask.status : "Pending",
       taskCreatedBy: user.email,
       teamId,
+      createdAt: editTask ? editTask.createdAt : new Date().toISOString(), // Add creation time
     };
 
     setIsLoading(true);
@@ -157,8 +141,6 @@ const TeamsTasks = () => {
         setSelectedMembers([]);
         setEditTask(null);
         document.getElementById("task_modal").close();
-      } else {
-        throw new Error("Failed to save task");
       }
     } catch (error) {
       toast.error("Failed to save task");
@@ -176,7 +158,6 @@ const TeamsTasks = () => {
       );
       const result = await res.json();
       if (result.deletedCount > 0) {
-        toast.success("Task deleted");
         setTasks(tasks.filter((task) => task._id !== taskId));
       } else {
         throw new Error("Failed to delete task");
@@ -238,69 +219,94 @@ const TeamsTasks = () => {
     return member?.name || email;
   };
 
+  const PendingTasks = tasks?.filter((t) => t?.status == "Pending");
+  const CompletedTasks = tasks?.filter((t) => t?.status == "Completed");
+  const InprogressTasks = tasks?.filter((t) => t?.status == "In Progress");
+
   if (isLoading || !tasks) {
     return <CustomLoader />;
   }
 
   return (
-    <div className="p-4 max-w-7xl w-full mx-auto">
+    <div className="p-4 max-w-7xl w-full mx-auto pt-20 md:pt-0">
       <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <Helmet>
         <title>Tasks</title>
       </Helmet>
-      <h1 className="text-2xl font-bold text-center mb-6">Tasks</h1>
-
-      {/* Filter & Sort Controls */}
-      <div className="flex flex-wrap gap-4 justify-center mb-6">
-        <select
-          className="border px-2 py-1 text-xs rounded"
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="All">All Status</option>
-          <option value="Pending">Pending</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
-        </select>
-
-        <select
-          className="border px-2 py-1 text-xs rounded"
-          value={priorityFilter}
-          onChange={(e) => setPriorityFilter(e.target.value)}
-        >
-          <option value="All">All Priority</option>
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-
-        <select
-          className="border px-2 py-1 text-xs rounded"
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
-        >
-          <option value="Newest">Due Date: Newest</option>
-          <option value="Oldest">Due Date: Oldest</option>
-          <option value="HighPriority">Priority: High → Low</option>
-          <option value="LowPriority">Priority: Low → High</option>
-        </select>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Tasks</h1>
+        <div className="flex gap-2">
+          <button
+            className={`px-4 py-2 rounded ${
+              sortOrder === "desc" ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+            onClick={() => handleSortChange("desc")}
+          >
+            Newest First
+          </button>
+          <button
+            className={`px-4 py-2 rounded ${
+              sortOrder === "asc" ? "bg-blue-500 text-white" : "bg-gray-200"
+            }`}
+            onClick={() => handleSortChange("asc")}
+          >
+            Oldest First
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
         <p className="text-center">Loading...</p>
-      ) : filteredTasks.length > 0 ? (
-        <div className="grid grid-cols-1 mx-auto w-full md:grid-cols-4 gap-4">
-          {filteredTasks.map((task) => (
-            <TaskCard
-              key={task._id}
-              task={task}
-              onDelete={handleDeleteTask}
-              onEdit={handleEditTask}
-              onStatusChange={handleStatusChange}
-              userEmail={user?.email}
-              users={users}
-            />
-          ))}
+      ) : tasks.length > 0 ? (
+        <div className="grid grid-cols-1 mx-auto w-full md:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-medium">Pending Tasks</h1>
+            <div className="flex flex-col gap-4">
+              {PendingTasks.map((task) => (
+                <TaskCard
+                  key={task._id}
+                  task={task}
+                  onDelete={handleDeleteTask}
+                  onEdit={handleEditTask}
+                  onStatusChange={handleStatusChange}
+                  userEmail={user?.email}
+                  users={users}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-medium">In Progress Tasks</h1>
+            <div className="flex flex-col gap-4">
+              {InprogressTasks.map((task) => (
+                <TaskCard
+                  key={task._id}
+                  task={task}
+                  onDelete={handleDeleteTask}
+                  onEdit={handleEditTask}
+                  onStatusChange={handleStatusChange}
+                  userEmail={user?.email}
+                  users={users}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-xl font-medium">Completed Tasks</h1>
+            <div className="flex flex-col gap-4">
+              {CompletedTasks.map((task) => (
+                <TaskCard
+                  key={task._id}
+                  task={task}
+                  onDelete={handleDeleteTask}
+                  onEdit={handleEditTask}
+                  onStatusChange={handleStatusChange}
+                  userEmail={user?.email}
+                  users={users}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       ) : (
         <p className="text-center text-gray-500">No tasks found</p>
@@ -345,10 +351,10 @@ const TeamsTasks = () => {
               />
             </div>
             <div>
-              <label className="block font-medium">Description</label>
+              <label className="block font-medium">Notes</label>
               <textarea
-                name="description"
-                defaultValue={editTask?.description}
+                name="notes"
+                defaultValue={editTask?.notes}
                 required
                 className="w-full border rounded p-2 h-20"
                 disabled={isLoading || usersLoading}
